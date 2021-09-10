@@ -13,30 +13,40 @@ my %setxkbmap = (
 );
 
 my $statusicon = Gtk3::StatusIcon -> new_from_stock('gtk-edit');
-$statusicon -> set_tooltip_text('xsetkbd');
+$statusicon -> set_tooltip_text('xsetkbdmap');
 
 my $menu = Gtk3::Menu -> new();
 
-my $menuitem = Gtk3::MenuItem -> new('dvorak');
-$menuitem -> set_tooltip_text('english');
-$menuitem -> signal_connect(activate => sub { system($setxkbmap{dvorak}); });
-$menu -> append($menuitem);
 
-$menuitem = Gtk3::MenuItem -> new('az');
-$menuitem -> set_tooltip_text('azerbaijani');
-$menuitem -> signal_connect(activate => sub { system($setxkbmap{az}); });
-$menu -> append($menuitem);
 
-$menuitem = Gtk3::MenuItem -> new('ru');
-$menuitem -> set_tooltip_text('russian');
-$menuitem -> signal_connect(activate => sub { system($setxkbmap{ru}); });
-$menu -> append($menuitem);
+
+# my $menu_radio_two = Gtk3::RadioMenuItem->new($group, 'Radio two');
+# $menu_radio_two->signal_connect('toggled' => \&toggle,"Radio two");
+# $menu->append($menu_radio_two);
+
+
+my $radiomenuitem = Gtk3::RadioMenuItem -> new_with_label(undef, 'dvorak');
+my $group = $radiomenuitem -> get_group();
+
+$radiomenuitem -> set_tooltip_text('english');
+$radiomenuitem -> signal_connect(toggled => sub { system($setxkbmap{dvorak}); });
+$menu -> append($radiomenuitem);
+
+$radiomenuitem = Gtk3::RadioMenuItem -> new_with_label($group, 'az');
+$radiomenuitem -> set_tooltip_text('azerbaijani');
+$radiomenuitem -> signal_connect(toggled => sub { system($setxkbmap{az}); });
+$menu -> append($radiomenuitem);
+
+$radiomenuitem = Gtk3::RadioMenuItem -> new_with_label($group, 'ru');
+$radiomenuitem -> set_tooltip_text('russian');
+$radiomenuitem -> signal_connect(toggled => sub { system($setxkbmap{ru}); });
+$menu -> append($radiomenuitem);
 
 $menu -> show_all();
 
 $statusicon -> signal_connect('popup-menu' => sub {
-  my($show, $button, $event_time) = @_;
-  $menu -> popup(undef, undef, \&Gtk3::StatusIcon::position_menu, $show, $button, $event_time);
+  my($show, $button, $time) = @_;
+  $menu -> popup(undef, undef, \&Gtk3::StatusIcon::position_menu, $show, $button, $time);
 });
 
 Gtk3 -> main();
