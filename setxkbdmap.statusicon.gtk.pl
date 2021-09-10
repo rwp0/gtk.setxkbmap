@@ -17,14 +17,6 @@ $statusicon -> set_tooltip_text('xsetkbdmap');
 
 my $menu = Gtk3::Menu -> new();
 
-
-
-
-# my $menu_radio_two = Gtk3::RadioMenuItem->new($group, 'Radio two');
-# $menu_radio_two->signal_connect('toggled' => \&toggle,"Radio two");
-# $menu->append($menu_radio_two);
-
-
 my $radiomenuitem = Gtk3::RadioMenuItem -> new_with_label(undef, 'dvorak');
 my $group = $radiomenuitem -> get_group();
 
